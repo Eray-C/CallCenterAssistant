@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Center Assistant - Chatbot Arayüzü</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Settings -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-headset pulse-icon"></i>
+                    <span>Assistant UI</span>
+                </div>
+                <span class="version-badge">v1.0</span>
+            </div>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-sliders"></i> AYARLAR</h3>
+
+                <div class="setting-group">
+                    <label for="tts-auto-play">
+                        <span class="setting-title"><i class="fa-solid fa-volume-high"></i> Otomatik Seslendir
+                            (TTS)</span>
+                        <span class="setting-desc">Yapay zeka cevaplarını otomatik sesli okur.</span>
+                    </label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="tts-auto-play" checked>
+                        <span class="slider"></span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label for="stt-direct-send">
+                        <span class="setting-title"><i class="fa-solid fa-paper-plane"></i> Konuşunca Direkt
+                            Gönder</span>
+                        <span class="setting-desc">Ses kaydı bitince mesajı otomatik gönderir.</span>
+                    </label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="stt-direct-send" checked>
+                        <span class="slider"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h3><i class="fa-solid fa-circle-nodes"></i> SERVİS DURUMLARI</h3>
+                <div class="status-item" id="status-api">
+                    <span class="status-name">Web API (Port: 8080)</span>
+                    <span class="status-dot green"></span>
+                </div>
+                <div class="status-item" id="status-ollama">
+                    <span class="status-name">Ollama (Llama3)</span>
+                    <span class="status-dot orange">Kontrol ediliyor</span>
+                </div>
+                <div class="status-item" id="status-whisper">
+                    <span class="status-name">Whisper STT</span>
+                    <span class="status-dot green">Hazır</span>
+                </div>
+                <div class="status-item" id="status-piper">
+                    <span class="status-name">Piper TTS</span>
+                    <span class="status-dot green">Hazır</span>
+                </div>
+            </div>
+
+            <footer class="sidebar-footer">
+                <p>Atlas Yazılım Teknik Değerlendirme</p>
+            </footer>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="header-info">
+                    <h2>Müşteri Temsilcisi Asistanı</h2>
+                    <p id="chat-subtitle">Lokal yapay zeka Llama3, Whisper STT ve Piper TTS entegrasyonu</p>
+                </div>
+                <div class="header-actions">
+                    <button id="call-btn" class="btn btn-call" title="Sesli Görüşme Başlat">
+                        <i class="fa-solid fa-phone"></i>
+                        <span id="call-btn-text">Ara</span>
+                    </button>
+                    <button id="clear-chat" class="btn btn-secondary" title="Sohbeti Temizle">
+                        <i class="fa-solid fa-trash-can"></i> Temizle
+                    </button>
+                </div>
+            </header>
+
+            <!-- Active Call Banner -->
+            <div class="call-banner" id="call-banner">
+                <div class="call-banner-inner">
+                    <div class="call-pulse-ring"></div>
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span id="call-banner-text">Bağlanıyor...</span>
+                    <span class="call-timer" id="call-timer">00:00</span>
+                </div>
+                <button id="hangup-btn" class="btn btn-hangup" title="Görüşmeyi Bitir">
+                    <i class="fa-solid fa-phone-slash"></i> Kapat
+                </button>
+            </div>
+
+            <!-- Message Area -->
+            <div class="messages-container" id="messages-container">
+                <div class="message system">
+                    <div class="message-content">
+                        <p><strong>Sistem:</strong> Hoş geldiniz! Sesli veya yazılı olarak sohbet edebilirsiniz. Sohbet
+                            etmek için aşağıdaki mikrofonu basılı tutarak konuşabilir veya mesajınızı yazıp
+                            gönderebilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing indicator -->
+            <div class="typing-indicator-container" id="typing-indicator">
+                <div class="typing-bubble">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <span class="typing-text">Asistan yazıyor...</span>
+            </div>
+
+            <!-- Audio Recording Wave overlay -->
+            <div class="recording-overlay" id="recording-overlay">
+                <div class="wave-container">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <span class="recording-time" id="recording-time">00:00</span>
+                <span class="recording-status">Sesiniz dinleniyor... Kaydı bitirmek için butona tekrar tıklayın.</span>
+            </div>
+
+            <!-- Input Controls -->
+            <footer class="chat-input-area">
+                <div class="input-wrapper">
+                    <!-- Text Input -->
+                    <textarea id="chat-input" placeholder="Bir mesaj yazın veya konuşmak için mikrofona tıklayın..."
+                        rows="1"></textarea>
+
+                    <!-- Microphone Control Button -->
+                    <button id="mic-btn" class="mic-btn" title="Sesli Konuş (STT)">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+
+                    <!-- Send Button -->
+                    <button id="send-btn" class="send-btn" title="Gönder">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Hidden audio element for TTS playback -->
+    <audio id="tts-audio" style="display: none;"></audio>
+    <!-- Hidden audio element for WebRTC incoming streams -->
+    <audio id="webrtc-audio" autoplay style="display: none;"></audio>
+
+    <!-- Call Modal Popup -->
+    <div id="call-modal" class="call-modal">
+        <div class="call-modal-content">
+            <div class="call-modal-header">
+                <div class="call-title">
+                    <span class="pulse-dot"></span>
+                    <h3>Görüşme Asistanı</h3>
+                </div>
+                <span id="call-modal-timer" class="call-modal-timer">00:00</span>
+            </div>
+            <div class="call-modal-body" id="call-modal-body">
+                <div id="modal-transcript" class="modal-transcript">
+                    <div class="modal-message system">
+                        <p>Arama kuruldu. Görüşme dökümü burada canlı olarak görünecektir...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="call-modal-footer">
+                <button id="modal-hangup-btn" class="btn btn-hangup">
+                    <i class="fa-solid fa-phone-slash"></i> Görüşmeyi Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JsSIP Library for WebRTC -->
+    <script src="jssip.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

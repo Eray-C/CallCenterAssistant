@@ -1,0 +1,149 @@
+<Window x:Class="SetupGui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CallCenterAssistant - Kolay Kurulum ve Yönetim Paneli" 
+        Height="650" Width="850"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E1E2E" Foreground="#FFFFFF"
+        FontFamily="Segoe UI Semibold"
+        ResizeMode="NoResize">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="CALL CENTER ASSISTANT" FontSize="26" FontWeight="Bold" Foreground="#89B4FA" HorizontalAlignment="Center"/>
+            <TextBlock Text="Tek Tıkla Yerel Kurulum ve Yönetim Paneli" FontSize="14" Foreground="#A6ADC8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Status Cards -->
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Docker Status -->
+            <Border Grid.Column="0" Background="#313244" CornerRadius="8" Margin="0,0,10,0" Padding="15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="DockerStatusDot" Width="15" Height="15" Fill="#F38BA8" Margin="0,0,15,0"/>
+                    <StackPanel>
+                        <TextBlock Text="Docker Desktop" FontSize="16" FontWeight="Bold" Foreground="#CDD6F4"/>
+                        <TextBlock x:Name="DockerStatusText" Text="Bağlantı Yok / Kapalı" FontSize="12" Foreground="#A6ADC8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Ollama Status -->
+            <Border Grid.Column="1" Background="#313244" CornerRadius="8" Margin="10,0,0,0" Padding="15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="OllamaStatusDot" Width="15" Height="15" Fill="#F38BA8" Margin="0,0,15,0"/>
+                    <StackPanel>
+                        <TextBlock Text="Ollama AI Engine" FontSize="16" FontWeight="Bold" Foreground="#CDD6F4"/>
+                        <TextBlock x:Name="OllamaStatusText" Text="Bağlantı Yok / Kapalı" FontSize="12" Foreground="#A6ADC8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Log Output & Action Section -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Log Viewer -->
+            <Border Grid.Column="0" Background="#11111B" CornerRadius="8" Margin="0,0,10,0" BorderBrush="#313244" BorderThickness="1">
+                <TextBox x:Name="LogTextBox" Background="Transparent" Foreground="#A6E3A1" BorderThickness="0" 
+                         IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"
+                         FontFamily="Consolas" FontSize="12" Padding="10" 
+                         Text="Sistem hazır. Kurulumu başlatmak için sağdaki 'Kurulumu Başlat' butonuna basın..."/>
+            </Border>
+
+            <!-- Actions Panel -->
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <!-- Progress Bar -->
+                <TextBlock x:Name="ProgressLabel" Text="İşlem Bekleniyor..." FontSize="12" Foreground="#CDD6F4" Margin="0,0,0,5"/>
+                <ProgressBar x:Name="InstallProgressBar" Height="20" Background="#313244" Foreground="#89B4FA" BorderThickness="0" Margin="0,0,0,20"/>
+
+                <!-- Action Buttons -->
+                <Button x:Name="InstallButton" Content="Kurulumu Başlat" Click="InstallButton_Click" Height="45" Background="#89B4FA" Foreground="#11111B" BorderThickness="0" Cursor="Hand" Margin="0,0,0,10">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="OpenChatbotButton" Content="Chatbot Arayüzünü Aç" Click="OpenChatbotButton_Click" Height="40" Background="#CBA6F7" Foreground="#11111B" BorderThickness="0" Cursor="Hand" IsEnabled="False" Margin="0,0,0,10">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="OpenSwaggerButton" Content="Swagger Arayüzünü Aç" Click="OpenSwaggerButton_Click" Height="40" Background="#A6E3A1" Foreground="#11111B" BorderThickness="0" Cursor="Hand" IsEnabled="False" Margin="0,0,0,10">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="UninstallButton" Content="API'yi Kaldır ve Temizle" Click="UninstallButton_Click" Height="40" Background="#F38BA8" Foreground="#11111B" BorderThickness="0" Cursor="Hand" Margin="0,0,0,10">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <TextBlock Text="* Not: Kurulum işlemi esnasında internet hızınıza bağlı olarak model indirmeleri yapıldığı için işlem birkaç dakika sürebilir." 
+                           FontSize="10" Foreground="#A6ADC8" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,20,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Footer -->
+        <TextBlock Grid.Row="3" Text="Atlas Yazılım - Teknik Değerlendirme Çalışması © 2026" FontSize="11" Foreground="#585B70" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+    </Grid>
+</Window>

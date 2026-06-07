@@ -1,0 +1,67 @@
+services:
+
+  # ---------------------------------------------------------------------------
+  # Asterisk PBX Servisi
+  # ---------------------------------------------------------------------------
+  asterisk:
+    image: andrius/asterisk:latest
+    container_name: asterisk
+    hostname: asterisk
+    restart: unless-stopped
+    ports:
+      - "5038:5038"           # AMI (Manager Interface)
+      - "5060:5060/udp"       # SIP UDP
+      - "8088:8088"           # HTTP / WebSocket (JsSIP)
+      - "10000-10099:10000-10099/udp"  # RTP ses kanalları
+    volumes:
+      - ./asterisk-config/etc/asterisk:/etc/asterisk:ro
+    environment:
+      - TZ=Europe/Istanbul
+    networks:
+      - callcenter-net
+    healthcheck:
+      test: ["CMD-SHELL", "asterisk -rx 'core show version' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+  # ---------------------------------------------------------------------------
+  # CallCenterAssistant API (ASP.NET 8.0)
+  # ---------------------------------------------------------------------------
+  callcenter-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callcenter-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      # Ollama host makinede çalışır
+      - Ollama__BaseUrl=http://host.docker.internal:11434
+      - Ollama__Model=llama3
+      # Asterisk: Docker ağı içinde servis adıyla erişilir
+      - Asterisk__Host=asterisk
+      - Asterisk__Port=5038
+      - Asterisk__Username=admin
+      - Asterisk__Password=password
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      asterisk:
+        condition: service_healthy
+    networks:
+      - callcenter-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  callcenter-net:
+    driver: bridge
