@@ -6,22 +6,7 @@ Bu proje, Atlas Yazilim Kisa Teknik Degerlendirme Calismasi kapsaminda hazirlana
 
 ## Sistem Mimarisi
 
-   Docker Compose Stack                  
-                                                     
-     +------------------+    +-----------------------+  
-     |  callcenter-app  |    |      asterisk         |  
-     |  (ASP.NET 8.0)   |<-->|   (Asterisk PBX)      |  
-     |  Port: 8080      |    |   AMI  -> :5038        |  
-     |                  |    |   SIP  -> :5060/udp    |  
-     |  /api/chat       |    |   WS   -> :8088        |  
-     |  /api/speech/*   |    |   RTP  -> :10000-10099 |  
-     |  /api/asterisk/* |    |                       |  
-     +------------------+    +-----------------------+  
-               |                                        
-               +------ host.docker.internal:11434
-                      v
-                   Ollama      (Host makinede calisir)
-                  (llama3)   
+
 
 Servisler:
 - Web API: ASP.NET Core 8.0 (Port: 8080)
@@ -43,7 +28,7 @@ Kurulum oncesinde bilgisayarinizda sunlarin yuklu ve calisir durumda olmasi gere
 
 ### Kurulum Adimlari
 1. Repoyu klonlayin veya ZIP olarak indirin:
-   git clone https://github.com/kullanici/CallCenterAssistant.git
+   git clone https://github.com/eray-c/CallCenterAssistant.git
    cd CallCenterAssistant
 
 2. SetupGui'yi baslatin:
@@ -69,7 +54,7 @@ Kurulum oncesinde bilgisayarinizda sunlarin yuklu ve calisir durumda olmasi gere
 Docker Compose'u dogrudan kullanmak isterseniz:
 
 1. Repoyu klonla:
-   git clone https://github.com/erayxciftci/CallCenterAssistant.git
+   git clone https://github.com/eray-c/CallCenterAssistant.git
    cd CallCenterAssistant
 
 2. Ollama'yi baslat ve modeli indir (host makinede):
