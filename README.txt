@@ -27,8 +27,8 @@ Kurulum oncesinde bilgisayarinizda sunlarin yuklu ve calisir durumda olmasi gere
 - Ollama: https://ollama.com/ (Kurulumdan sonra "ollama pull llama3" calistirin)
 
 ### Kurulum Adimlari
-1. Repoyu klonlayin veya ZIP olarak indirin:
-   git clone https://github.com/eray-c/CallCenterAssistant.git
+1. RepoyuZIP olarak indirin:
+   https://github.com/eray-c/CallCenterAssistant.git
    cd CallCenterAssistant
 
 2. SetupGui'yi baslatin:
@@ -48,26 +48,6 @@ Kurulum oncesinde bilgisayarinizda sunlarin yuklu ve calisir durumda olmasi gere
    - Asterisk AMI: localhost:5038
 
 ---
-
-## Manuel Kurulum (Komut Satiri)
-
-Docker Compose'u dogrudan kullanmak isterseniz:
-
-1. Repoyu klonla:
-   git clone https://github.com/eray-c/CallCenterAssistant.git
-   cd CallCenterAssistant
-
-2. Ollama'yi baslat ve modeli indir (host makinede):
-   ollama pull llama3
-
-3. Tum servisleri baslat (Asterisk + API):
-   docker compose up -d --build
-
-4. Calisan servisleri kontrol et:
-   docker compose ps
-
-5. Loglari izle:
-   docker compose logs -f
 
 Servisleri Durdurmak:
 - Servisleri durdur (imajlari koru):
